@@ -138,7 +138,7 @@ color (#rrrrggggbbbb)."
         (setq bounds (bounds-of-thing-at-point 'word))
         (setq word (buffer-substring-no-properties
                     (car bounds) (cdr bounds)))
-        (when (erc-get-channel-user word)
+        (when (erc-get-server-user word)
           (when erc-highlight-nick-truncate
             (condition-case nil
                 (progn
