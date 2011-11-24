@@ -89,8 +89,13 @@
   "Pseudo-random seed for generating different nick-color hashes. Set this
 to any string you want in order to get new, totally different nick hash colors."
   :type 'string
-  :group 'erc-faces
+  :group 'erc-highlight-nick
   :set 'set-highlight-nick-suffix)
+
+(defcustom erc-highlight-nick-truncate nil
+  "Truncate nicks to the specified length before highlighting them."
+  :type 'integer
+  :group 'erc-highlight-nick)
 
 (defface erc-highlight-nick-base-face
   '((t nil))
@@ -134,6 +139,15 @@ color (#rrrrggggbbbb)."
         (setq word (buffer-substring-no-properties
                     (car bounds) (cdr bounds)))
         (when (erc-get-channel-user word)
+          (when erc-highlight-nick-truncate
+            (condition-case nil
+                (progn
+                  (setq word (substring word 0 erc-highlight-nick-truncate))
+                  (message word)
+                  (delete-region (car bounds) (cdr bounds))
+                  (insert word)
+                  (setq bounds (bounds-of-thing-at-point 'word)))
+              (args-out-of-range nil)))
           (setq new-nick-face (gethash word erc-highlight-face-table))
           (unless new-nick-face
             (setq color (concat "#" (substring (md5 (concat (downcase word)
