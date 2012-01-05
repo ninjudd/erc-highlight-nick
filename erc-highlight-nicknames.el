@@ -143,7 +143,6 @@ color (#rrrrggggbbbb)."
             (condition-case nil
                 (progn
                   (setq word (substring word 0 erc-highlight-nick-truncate))
-                  (message word)
                   (delete-region (car bounds) (cdr bounds))
                   (insert word)
                   (setq bounds (bounds-of-thing-at-point 'word)))
